@@ -1,12 +1,91 @@
 ﻿<Window x:Class="AntSimulator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AntSimulator"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        xmlns:controls="clr-namespace:AntSimulator.Controls"
+        Title="Симулятор муравья"
+        Width="1150" Height="760" MinWidth="960" MinHeight="620"
+        WindowStartupLocation="CenterScreen">
 
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Левая панель: настройка поля, правил и управление -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+            <StackPanel>
+
+                <GroupBox Header="1. Игровое поле" Padding="6">
+                    <StackPanel x:Name="FieldPanel">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                <TextBlock Text="Ширина (клеток)"/>
+                                <TextBox x:Name="WidthBox" Text="80" Padding="2"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                                <TextBlock Text="Высота (клеток)"/>
+                                <TextBox x:Name="HeightBox" Text="80" Padding="2"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <CheckBox x:Name="RandomFillBox" Content="Случайная заливка поля" Margin="0,8,0,0"/>
+
+                        <TextBlock Margin="0,6,0,0" FontSize="11" Foreground="#666666" TextWrapping="Wrap"
+                                   Text="Размер от 5 до 600. ЛКМ по полю — перекрасить клетку, ПКМ — поставить муравья (на паузе)."/>
+
+                        <Button x:Name="GenerateButton" Content="Сгенерировать" Margin="0,8,0,0"
+                                Padding="0,6" Click="OnGenerateClick"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="2. Правила поведения" Padding="6" Margin="0,10,0,0">
+                    <StackPanel x:Name="RulesPanel">
+                        <controls:RuleEditor x:Name="WhiteRuleEditor" Header="Если клетка БЕЛАЯ:"/>
+                        <controls:RuleEditor x:Name="BlackRuleEditor" Header="Если клетка ЧЁРНАЯ:" Margin="0,10,0,0"/>
+                        <TextBlock Margin="0,6,0,0" FontSize="11" Foreground="#666666" TextWrapping="Wrap"
+                                   Text="Блоки выполняются сверху вниз за один шаг. Количество блоков не ограничено."/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="3. Управление" Padding="6" Margin="0,10,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Скорость (шагов за кадр)"/>
+                        <Slider x:Name="SpeedSlider" Minimum="1" Maximum="500" Value="1"/>
+                        <TextBlock FontSize="11" Foreground="#666666"
+                                   Text="{Binding ElementName=SpeedSlider, Path=Value, StringFormat={}{0:F0} шагов/кадр}"/>
+
+                        <UniformGrid Columns="3" Margin="0,8,0,0">
+                            <Button x:Name="StartButton" Content="Запустить" Margin="0,0,4,0"
+                                    Padding="0,6" Click="OnStartClick"/>
+                            <Button x:Name="PauseButton" Content="Пауза" Margin="0,0,4,0"
+                                    Padding="0,6" Click="OnPauseClick"/>
+                            <Button x:Name="StepButton" Content="Шаг" Padding="0,6" Click="OnStepClick"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Правая часть: поле -->
+        <DockPanel Grid.Column="1">
+            <TextBlock x:Name="StatusText" DockPanel.Dock="Bottom" Margin="0,6,0,0" Text="Поле не создано"/>
+            <Border BorderBrush="#BBBBBB" BorderThickness="1" Background="#F2F2F2">
+                <Image x:Name="FieldImage"
+                       Stretch="Uniform"
+                       RenderOptions.BitmapScalingMode="NearestNeighbor"
+                       SnapsToDevicePixels="True"
+                       MouseLeftButtonDown="OnFieldMouseLeftButtonDown"
+                       MouseLeftButtonUp="OnFieldMouseLeftButtonUp"
+                       MouseRightButtonDown="OnFieldMouseRightButtonDown"
+                       MouseMove="OnFieldMouseMove"
+                       MouseLeave="OnFieldMouseLeave"/>
+            </Border>
+        </DockPanel>
     </Grid>
 </Window>
