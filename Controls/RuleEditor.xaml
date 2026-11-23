@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="AntSimulator.Controls.RuleEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel>
+        <TextBlock x:Name="HeaderText" FontWeight="SemiBold" Margin="0,0,0,4"/>
+
+        <ComboBox x:Name="ActionBox" DisplayMemberPath="Title"/>
+
+        <UniformGrid Columns="2" Margin="0,4,0,4">
+            <Button Content="Добавить" Margin="0,0,2,2" Padding="0,3" Click="OnAddClick"/>
+            <Button Content="Удалить"  Margin="2,0,0,2" Padding="0,3" Click="OnRemoveClick"/>
+            <Button Content="Выше"     Margin="0,2,2,0" Padding="0,3" Click="OnMoveUpClick"/>
+            <Button Content="Ниже"     Margin="2,2,0,0" Padding="0,3" Click="OnMoveDownClick"/>
+        </UniformGrid>
+
+        <ListBox x:Name="RulesList" Height="110" DisplayMemberPath="Title"/>
+    </StackPanel>
+</UserControl>
